@@ -83,3 +83,15 @@
 * 3.5.0
   * Add `*_offset` variants to `produce` APIs, returning the base offsets that were assigned by Kafka.
     Producers need to be restarted when upgrading to this version.
+* 3.6.0
+  * Moved 3 modules to kafka_protocol:
+    - `brod_sock` -> `kpro_connection`
+    - `brod_auth_backed` -> `kpro_auth_backend`
+    - `brod_kafka_requests` -> `kpro_sent_reqs`
+  * `#kafka_message.key` and `#kafka_message.value` are now always `binary()`
+    (they were of spec `undefined | binary()` prior to this version).
+    i.e. empty bytes are now decoded as `<<>>` instead of `undefined`.
+    This may cause dialyzer check failures.
+  * `brod_client` no longer logs about metadata socket down, it had been confusing rather than being helpful
+  * `brod_group_coordinator` default session timeout changed from 10 seconds to 30,
+     and heartbeat interval changed from 2 seconds to 5.
